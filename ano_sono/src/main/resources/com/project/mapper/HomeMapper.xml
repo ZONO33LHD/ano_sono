@@ -1,0 +1,18 @@
+<!-- UserMapper.xml -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.HomeMapper">
+
+    <insert id="registBlogUrl"
+            parameterType="com.project.form.ContentsForm">
+        INSERT INTO SPRINGPROJECT.URL_STORAGE (url)
+        VALUES (#{url})
+    </insert>
+
+    <select id="getBlogUrl"
+            resultType="com.project.entity.UrlStorage">
+        SELECT * FROM SPRINGPROJECT.URL_STORAGE
+    </select>
+</mapper>
