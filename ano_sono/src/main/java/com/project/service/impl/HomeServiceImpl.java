@@ -19,9 +19,6 @@ public class HomeServiceImpl implements HomeService {
 	@Autowired
 	private HomeMapper homeMapper;
 
-	@Autowired
-	private UrlStorage urlStorage;
-
 	// URLを登録するメソッド
 	@Override
 	public void registBlogUrl(ContentsForm form) {

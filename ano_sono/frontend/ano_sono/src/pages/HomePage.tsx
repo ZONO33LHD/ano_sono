@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import axios from "axios";
 import Image from 'next/image'
-import top_image from '../../../public/top_image.jpg';
+import top_image from '../../public/top_image.jpg';
+import { NavBar } from "../app/components/NavBar";
+import Footer from "../app/components/Footer";
 
 interface PostProps {
   id: string;
@@ -21,20 +24,27 @@ const Page: React.FC = () => {
     setUrl(event.target.value);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     axios
-      .post("http://localhost:8080/api/blog", { url }) // SpringBootのエンドポイントに合わせて変更してください
+      .post("http://localhost:8000/api/blog", { url }) // SpringBootのエンドポイントに合わせて変更してください
       .then((response) => {
         // レスポンスを受け取ったら、posts stateを更新する
         // ここでは、response.dataが新しいブログサイトの情報を含むオブジェクトであると仮定します
         const newPost: PostProps = response.data;
         setPosts([...posts, newPost]);
+
+        // HOMEに遷移させる
+        setShowModal(false);
       })
       .catch((error) => {
         console.error(error);
+
       });
   };
 
   return (
+    <>
+      <NavBar />
     <main>
       <div>
       <Image src={top_image} alt="ano_sono" layout="responsive" objectFit="cover" width={1920} height={580} />
@@ -101,12 +111,11 @@ const Page: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* 以下は既存のコード */}
       <div className="w-full flex flex-col justify-center items-center">
-        {/* 以下省略 */}
       </div>
     </main>
+    <Footer />
+    </>
     // <main>
     //   <div className="w-full flex flex-col justify-center items-center">
     //     {posts.map((post: PostProps) => (
@@ -136,6 +145,7 @@ const Page: React.FC = () => {
     //     ))}
     //   </div>
     // </main>
+
   );
 };
 
