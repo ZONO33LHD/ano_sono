@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import ano_sono_icon from "../../../public/ano_sono_icon.svg";
 
 export function NavBar() {

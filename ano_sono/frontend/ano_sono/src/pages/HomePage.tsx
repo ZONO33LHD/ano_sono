@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import axios from "axios";
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import top_image from '../../public/top_image.jpg';
 import { NavBar } from "../app/components/NavBar";
 import Footer from "../app/components/Footer";
