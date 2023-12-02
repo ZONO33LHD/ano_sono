@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.project.mapper.HomeMapper;
 import com.project.form.ContentsForm;
 
+import java.util.List;
+
 /**
  * HoME画面サービスクラス
  *
@@ -28,8 +30,8 @@ public class HomeServiceImpl implements HomeService {
 
 	// URLを取得するメソッド
 	@Override
-	public UrlStorage getBlogUrl() {
+	public List<UrlStorage> getBlogUrls() {
 
-		return homeMapper.getBlogUrl();
+		return homeMapper.getBlogUrls();
 	}
 }

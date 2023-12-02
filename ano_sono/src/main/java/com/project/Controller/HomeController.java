@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.form.ContentsForm;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 @RestController
@@ -20,6 +24,8 @@ public class HomeController {
 
 	@Autowired
 	private HomeService homeService;
+
+	private List<UrlStorage> urlList;
 
 	@Value("${spring.application.name}")
 	private String name;
@@ -37,9 +43,12 @@ public class HomeController {
 
 	// URL取得処理
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/api/blog")
-	public UrlStorage handleGetRequest() {
+	@GetMapping("/api/blog/get")
+	public List<UrlStorage> handleGetRequest() {
 		logger.info(name);
-		return homeService.getBlogUrl();
+
+		urlList = homeService.getBlogUrls();
+		System.out.println(urlList);
+		return urlList;
 	}
 }

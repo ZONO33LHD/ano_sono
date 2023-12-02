@@ -11,7 +11,7 @@
         VALUES (#{url})
     </insert>
 
-    <select id="getBlogUrl"
+    <select id="getBlogUrls"
             resultType="com.project.entity.UrlStorage">
         SELECT * FROM SPRINGPROJECT.URL_STORAGE
     </select>

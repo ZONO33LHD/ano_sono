@@ -5,10 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.project.form.ContentsForm;
 
+import java.util.List;
+
 @Mapper
 public interface HomeMapper {
 
 	void registBlogUrl(ContentsForm form);
 
-	UrlStorage getBlogUrl();
+	List<UrlStorage> getBlogUrls();
 }
