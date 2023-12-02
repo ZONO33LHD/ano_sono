@@ -11,6 +11,6 @@ public interface HomeService {
    void registBlogUrl(ContentsForm form);
 
    // URLを取得するメソッド
-   List<UrlStorage> getBlogUrls();
+   List<UrlStorage> getBlogUrls(int limit, int offset);
     
 }

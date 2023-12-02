@@ -30,8 +30,8 @@ public class HomeServiceImpl implements HomeService {
 
 	// URLを取得するメソッド
 	@Override
-	public List<UrlStorage> getBlogUrls() {
+	public List<UrlStorage> getBlogUrls(int limit, int offset) {
 
-		return homeMapper.getBlogUrls();
+		return homeMapper.getBlogUrls(limit, offset);
 	}
 }

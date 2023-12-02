@@ -14,5 +14,6 @@
     <select id="getBlogUrls"
             resultType="com.project.entity.UrlStorage">
         SELECT * FROM SPRINGPROJECT.URL_STORAGE
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 </mapper>

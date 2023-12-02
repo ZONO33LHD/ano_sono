@@ -12,5 +12,5 @@ public interface HomeMapper {
 
 	void registBlogUrl(ContentsForm form);
 
-	List<UrlStorage> getBlogUrls();
+	List<UrlStorage> getBlogUrls(int limit, int offset);
 }

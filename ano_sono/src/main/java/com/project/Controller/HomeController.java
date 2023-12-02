@@ -44,11 +44,21 @@ public class HomeController {
 	// URL取得処理
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/api/blog/get")
-	public List<UrlStorage> handleGetRequest() {
+	public List<UrlStorage> handleGetRequest(@RequestParam int page) {
 		logger.info(name);
-
-		urlList = homeService.getBlogUrls();
-		System.out.println(urlList);
+		int limit = 5;
+		int offset = page * limit;
+		urlList = homeService.getBlogUrls(limit, offset);
 		return urlList;
 	}
+
+	// 登録されているURLの総数を取得する処理
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/api/blog/count")
+	public int handleGetCountRequest() {
+		logger.info(name);
+		urlList = homeService.getBlogUrls();
+		return urlList.size();
+	}
 }
+

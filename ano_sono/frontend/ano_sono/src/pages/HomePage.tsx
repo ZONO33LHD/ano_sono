@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/legacy/image";
 import top_image from "../../public/top_image.jpg";
-import { NavBar } from "../app/components/NavBar";
-import Footer from "../app/components/Footer";
 
 interface PostProps {
   id: string;
@@ -24,15 +22,42 @@ const Page: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setUrl(event.target.value);
 
-    useEffect(() => {
-      axios.get('http://localhost:8000/api/blog/get')
-        .then(response => {
-          setPosts(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/blog/get`)
+      .then((response) => {
+        setPosts(response.data.slice((currentPage - 1) * 5, currentPage * 5));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [currentPage]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/blog/count")
+      .then((response) => {
+        setTotalPages(Math.ceil(response.data / 5));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((page) => page + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((page) => page - 1);
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,9 +65,7 @@ const Page: React.FC = () => {
     axios
       .post("http://localhost:8000/api/blog", { url })
       .then((response) => {
-        const newPost: PostProps = response.data;
-        setPosts([...posts, newPost]);
-        // HOMEに遷移させる
+        setCurrentPage(1);
         setShowModal(false);
         setUrl("");
       })
@@ -64,26 +87,47 @@ const Page: React.FC = () => {
             height={580}
           />
         </div>
-        <div>
-
-              {posts.map((post) => (
-                <div key={post.id} className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">{post.title}</h5>
-                    <p className="card-text">{post.description}</p>
-                    <a href={post.url} className="btn btn-primary">
-                      詳細を見る
-                    </a>
-                  </div>
-                </div>
-              ))}
+        <div className="relative w-full flex justify-end bg-white z-10 mb-4 mt-4">
+          <button
+            onClick={handleOpenModal}
+            className="relative mb-4 mr-10 bg-green-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
+          >
+            新規登録
+          </button>
         </div>
-        <button
-          onClick={handleOpenModal}
-          className="absolute bottom-20 right-10 bg-green-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
-        >
-          新規作成
-        </button>
+        <div>
+          {posts.map((post) => (
+            <a
+              key={post.id}
+              href={post.url}
+              target="_blank"
+              className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block"
+            >
+              <div className="card-body p-4">
+                <h5 className="card-title text-xl font-bold">{post.title}</h5>
+                <p className="card-text text-gray-700 mt-2">
+                  {post.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div className="fixed bottom-16 w-full flex justify-center bg-white z-10">
+          <button
+            onClick={goToPreviousPage}
+            className="mx-2 px-4 py-2 bg-gray-200 text-black rounded"
+          >
+            &lt;
+          </button>
+          <p className="mx-2">{`${currentPage} / ${totalPages}`}</p>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage >= totalPages}
+            className="mx-2 px-4 py-2 bg-gray-200 text-black rounded"
+          >
+            &gt;
+          </button>
+        </div>
 
         {showModal && (
           <div
