@@ -220,10 +220,10 @@ const Page: React.FC = () => {
             height={400}
           />
         </div>
-        <div className="fixed mt-3 w-full flex justify-end bg-white z-10">
+        <div className="fixed mt-3  w-full flex justify-end bg-white z-10">
           <button
             onClick={handleOpenModal}
-            className="relative bg-green-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
+            className="relative bg-green-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mr-10"
           >
             新規登録
           </button>
