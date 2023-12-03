@@ -4,16 +4,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.mapper.HomeMapper">
-
-    <insert id="registBlogUrl"
-            parameterType="com.project.form.ContentsForm">
-        INSERT INTO SPRINGPROJECT.URL_STORAGE (url)
-        VALUES (#{url})
+    <!-- 登録処理 -->
+    <insert id="registBlogUrl" parameterType="com.project.form.ContentsForm">
+        INSERT INTO SPRINGPROJECT.URL_STORAGE (title, url, description)
+        VALUES (#{title}, #{url}, #{description})
     </insert>
 
-    <select id="getBlogUrls"
-            resultType="com.project.entity.UrlStorage">
-        SELECT * FROM SPRINGPROJECT.URL_STORAGE
-        LIMIT #{limit} OFFSET #{offset}
+    <!-- 情報取得処理 -->
+    <select id="getBlogUrls" resultType="com.project.entity.UrlStorage">
+        SELECT * FROM (
+            SELECT t.*, ROWNUM r FROM (
+                SELECT * FROM SPRINGPROJECT.URL_STORAGE ORDER BY id
+                ) t
+             )
+        WHERE r BETWEEN #{offset} + 1 AND #{offset} + #{limit}
     </select>
+
+    <!-- 個数取得処理 -->
+    <select id="getCountUrls"
+            resultType="int">
+        SELECT COUNT(*) FROM SPRINGPROJECT.URL_STORAGE
+    </select>
+
+    <!-- 更新処理 -->
+    <update id="updateBlogContents" parameterType="com.project.form.ContentsForm">
+        UPDATE SPRINGPROJECT.URL_STORAGE
+        SET title = #{title}, url = #{url}, description = #{description}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 削除処理 -->
+    <delete id="deleteBlogContents" parameterType="java.lang.Long">
+        DELETE FROM SPRINGPROJECT.URL_STORAGE
+        WHERE id = #{id}
+    </delete>
+
 </mapper>

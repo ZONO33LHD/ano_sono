@@ -12,5 +12,14 @@ public interface HomeService {
 
    // URLを取得するメソッド
    List<UrlStorage> getBlogUrls(int limit, int offset);
+
+    // 登録されているURLの総数を取得するメソッド
+    int getCountUrls();
+
+    // 登録されている情報の編集更新処理
+    void updateBlogContents(ContentsForm form);
+
+    // 登録されている情報の削除処理
+    void deleteBlogContents(Long id);
     
 }

@@ -4,5 +4,8 @@ import lombok.Data;
 
 @Data
 public class ContentsForm {
-    private String Url;
+    private Long id;
+    private String title;
+    private String url;
+    private String description;
 }
