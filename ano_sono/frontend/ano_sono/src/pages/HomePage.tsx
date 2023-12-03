@@ -113,7 +113,7 @@ const Page: React.FC = () => {
     axios
       .get("http://localhost:8000/api/blog/count")
       .then((response) => {
-        setTotalPages(Math.ceil(response.data / 5));
+        setTotalPages(Math.ceil(response.data / 7));
       })
       .catch((error) => {
         console.error(error);
@@ -159,8 +159,8 @@ const Page: React.FC = () => {
         axios
           .get("http://localhost:8000/api/blog/count")
           .then((response) => {
-            setTotalPages(Math.ceil(response.data / 5));
-            setCurrentPage(Math.ceil(response.data / 5)); // 追加: currentPageを最新のページに更新
+            setTotalPages(Math.ceil(response.data / 7));
+            setCurrentPage(Math.ceil(response.data / 7)); // 追加: currentPageを最新のページに更新
           })
           .catch((error) => {
             console.error(error);
@@ -179,7 +179,7 @@ const Page: React.FC = () => {
         axios
           .get("http://localhost:8000/api/blog/count")
           .then((response) => {
-            const newTotalPages = Math.ceil(response.data / 5);
+            const newTotalPages = Math.ceil(response.data / 7);
             setTotalPages(newTotalPages);
             if (currentPage > newTotalPages) {
               setCurrentPage(newTotalPages);
@@ -197,7 +197,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/blog/get?startIndex=${(currentPage - 1) * 5}`
+        `http://localhost:8000/api/blog/get?startIndex=${(currentPage - 1) * 7}`
       )
       .then((response) => {
         setPosts(response.data);

@@ -16,11 +16,11 @@ export function NavBar() {
             />{" "}
           </div>
         </Link>
-        <Link href="/" className="ml-8 mr-4 hover:text-gray-300">
+        <Link href="/" className="ml-8 mr-5 hover:text-gray-300">
           Home
         </Link>
-        <Link href="/about" className="mr-4 hover:text-gray-300">
-          About
+        <Link href="/search" className="mr-5 hover:text-gray-300">
+          Search
         </Link>
         <Link href="/preference" className="hover:text-gray-300">
           Preference

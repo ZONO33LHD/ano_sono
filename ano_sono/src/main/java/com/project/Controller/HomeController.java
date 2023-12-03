@@ -2,6 +2,7 @@ package com.project.Controller;
 
 
 import com.project.entity.UrlStorage;
+import com.project.form.SearchForm;
 import com.project.service.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.form.ContentsForm;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 
 @RestController
@@ -46,7 +44,7 @@ public class HomeController {
 	@GetMapping("/api/blog/get")
 	public List<UrlStorage> handleGetRequest(@RequestParam int startIndex) {
 		logger.info(name);
-		int limit = 5;
+		int limit = 7;
 		urlList = homeService.getBlogUrls(limit, startIndex);
 		System.out.println();
 		return urlList;
@@ -74,6 +72,13 @@ public class HomeController {
 	public void handleDeleteRequest(@PathVariable("id") Long id) {
 		logger.info(name);
 		homeService.deleteBlogContents(id);
+	}
+
+	// 検索処理
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/api/blog/search")
+	public List<UrlStorage> handleSearchRequest(@RequestBody SearchForm searchForm) {
+		return homeService.getSearchResult(searchForm);
 	}
 }
 

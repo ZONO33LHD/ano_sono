@@ -1,6 +1,7 @@
 package com.project.mapper;
 
 import com.project.entity.UrlStorage;
+import com.project.form.SearchForm;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.project.form.ContentsForm;
@@ -25,4 +26,8 @@ public interface HomeMapper {
 
 	// 登録されている情報の削除処理
 	void deleteBlogContents(Long id);
+
+	// 検索結果を取得するマッパー
+	// HomeMapper.java
+	List<UrlStorage> getSearchResult(SearchForm searchForm, @Param("limit") int limit, @Param("offset") int offset);
 }
