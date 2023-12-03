@@ -113,7 +113,7 @@ const Page: React.FC = () => {
     axios
       .get("http://localhost:8000/api/blog/count")
       .then((response) => {
-        setTotalPages(Math.ceil(response.data / 3));
+        setTotalPages(Math.ceil(response.data / 5));
       })
       .catch((error) => {
         console.error(error);
@@ -159,8 +159,8 @@ const Page: React.FC = () => {
         axios
           .get("http://localhost:8000/api/blog/count")
           .then((response) => {
-            setTotalPages(Math.ceil(response.data / 3));
-            setCurrentPage(Math.ceil(response.data / 3)); // 追加: currentPageを最新のページに更新
+            setTotalPages(Math.ceil(response.data / 5));
+            setCurrentPage(Math.ceil(response.data / 5)); // 追加: currentPageを最新のページに更新
           })
           .catch((error) => {
             console.error(error);
@@ -179,7 +179,7 @@ const Page: React.FC = () => {
         axios
           .get("http://localhost:8000/api/blog/count")
           .then((response) => {
-            const newTotalPages = Math.ceil(response.data / 3);
+            const newTotalPages = Math.ceil(response.data / 5);
             setTotalPages(newTotalPages);
             if (currentPage > newTotalPages) {
               setCurrentPage(newTotalPages);
@@ -197,7 +197,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/blog/get?startIndex=${(currentPage - 1) * 3}`
+        `http://localhost:8000/api/blog/get?startIndex=${(currentPage - 1) * 5}`
       )
       .then((response) => {
         setPosts(response.data);
@@ -232,11 +232,11 @@ const Page: React.FC = () => {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative"
+              className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative hover:shadow-xl transition-shadow duration-200"
             >
               <div>
                 <a href={post.url} target="_blank" className="card-body p-4">
-                  <h5 className="card-title pl-3 text-xl font-bold">
+                  <h5 className="card-title pl-3 text-xl font-bold underline">
                     {post.title}
                   </h5>
                   <p className="card-text pl-3 text-gray-700 mt-2">
@@ -262,15 +262,22 @@ const Page: React.FC = () => {
         <div className="fixed bottom-16 w-full flex justify-center bg-white z-10">
           <button
             onClick={goToPreviousPage}
-            className="mx-2 px-4 py-2 bg-gray-200 text-black rounded"
+            disabled={currentPage === 1}
+            className={`mx-2 px-4 py-2 bg-gray-200 text-black rounded ${
+              currentPage !== 1 ? "hover:bg-gray-300" : ""
+            }`}
           >
             &lt;
           </button>
-          <p className="mx-2">{`${currentPage} / ${totalPages}`}</p>
+          <div className="flex items-center">
+            <p className="mx-2">{`${currentPage} / ${totalPages}`}</p>
+          </div>
           <button
             onClick={goToNextPage}
             disabled={currentPage >= totalPages}
-            className="mx-2 px-4 py-2 bg-gray-200 text-black rounded"
+            className={`mx-2 px-4 py-2 bg-gray-200 text-black rounded ${
+              currentPage < totalPages ? "hover:bg-gray-300" : ""
+            }`}
           >
             &gt;
           </button>
