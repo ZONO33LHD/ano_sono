@@ -44,21 +44,36 @@ public class HomeController {
 	// URL取得処理
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/api/blog/get")
-	public List<UrlStorage> handleGetRequest(@RequestParam int page) {
+	public List<UrlStorage> handleGetRequest(@RequestParam int startIndex) {
 		logger.info(name);
-		int limit = 5;
-		int offset = page * limit;
-		urlList = homeService.getBlogUrls(limit, offset);
+		int limit = 3;
+		urlList = homeService.getBlogUrls(limit, startIndex);
+		System.out.println();
 		return urlList;
 	}
-
 	// 登録されているURLの総数を取得する処理
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/api/blog/count")
 	public int handleGetCountRequest() {
 		logger.info(name);
-		urlList = homeService.getBlogUrls();
-		return urlList.size();
+		int countList = homeService.getCountUrls();
+		return countList;
+	}
+
+	// 登録されている情報の編集更新処理
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PutMapping("/api/blog/edit/{id}")
+	public void handlePutRequest(@PathVariable("id") Long id, @RequestBody ContentsForm form) {
+		logger.info(name);
+		homeService.updateBlogContents(form);
+	}
+
+	// 登録されている情報の削除処理
+	@CrossOrigin(origins = "http://localhost:3000")
+	@DeleteMapping("/api/blog/delete/{id}")
+	public void handleDeleteRequest(@PathVariable("id") Long id) {
+		logger.info(name);
+		homeService.deleteBlogContents(id);
 	}
 }
 

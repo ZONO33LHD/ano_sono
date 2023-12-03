@@ -32,6 +32,29 @@ public class HomeServiceImpl implements HomeService {
 	@Override
 	public List<UrlStorage> getBlogUrls(int limit, int offset) {
 
-		return homeMapper.getBlogUrls(limit, offset);
+		List<UrlStorage> result = homeMapper.getBlogUrls(limit, offset);
+
+		return result;
+	}
+
+	// 登録されているURLの総数を取得するメソッド
+	@Override
+	public int getCountUrls() {
+
+		return homeMapper.getCountUrls();
+	}
+
+	// 登録されている情報の編集更新処理
+	@Override
+	public void updateBlogContents(ContentsForm form) {
+
+		homeMapper.updateBlogContents(form);
+	}
+
+	// 登録されている情報の削除処理
+	@Override
+	public void deleteBlogContents(Long id) {
+
+		homeMapper.deleteBlogContents(id);
 	}
 }
