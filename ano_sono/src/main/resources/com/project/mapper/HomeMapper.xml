@@ -54,7 +54,7 @@
         ORDER BY id
         ) t
         )
-        WHERE r BETWEEN #{offset} + 1 AND #{offset} + #{limit}
+        WHERE r BETWEEN #{searchForm.startIndex} + 1 AND #{searchForm.startIndex} + #{searchForm.limit}
     </select>
 
 </mapper>

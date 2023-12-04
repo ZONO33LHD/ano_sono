@@ -9,4 +9,6 @@ import lombok.Data;
 public class SearchForm {
     private String title;
     private String description;
+    private String startIndex;
+    private String limit;
 }

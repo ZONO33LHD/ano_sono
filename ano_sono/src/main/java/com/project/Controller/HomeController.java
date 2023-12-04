@@ -44,7 +44,7 @@ public class HomeController {
 	@GetMapping("/api/blog/get")
 	public List<UrlStorage> handleGetRequest(@RequestParam int startIndex) {
 		logger.info(name);
-		int limit = 7;
+		int limit = 5;
 		urlList = homeService.getBlogUrls(limit, startIndex);
 		System.out.println();
 		return urlList;
