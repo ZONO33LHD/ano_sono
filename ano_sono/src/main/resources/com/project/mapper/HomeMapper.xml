@@ -29,7 +29,11 @@
     <!-- 更新処理 -->
     <update id="updateBlogContents" parameterType="com.project.form.ContentsForm">
         UPDATE SPRINGPROJECT.URL_STORAGE
-        SET title = #{title}, url = #{url}, description = #{description}
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="description != null">description = #{description},</if>
+        </set>
         WHERE id = #{id}
     </update>
 

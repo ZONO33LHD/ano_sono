@@ -81,7 +81,7 @@ const Page: React.FC = () => {
         description: editingDescription,
       })
       .then((response) => {
-        // 更新が成功したら、編集モーダルを閉じます
+        // 更新が成功したら、編集モーダルを閉じる
         setEditModalOpen(false);
         // 投稿リストを更新します
         setPosts(
@@ -104,7 +104,7 @@ const Page: React.FC = () => {
   };
 
   const handleCloseEditModal = () => {
-    // 編集モーダルを閉じ、編集中の投稿IDをリセットします
+    // 編集モーダルを閉じ、編集中の投稿IDをリセットする
     setEditModalOpen(false);
     setEditingPostId(null);
   };
@@ -155,7 +155,7 @@ const Page: React.FC = () => {
             description: description,
           },
         ]);
-        // 投稿の総数を再取得します
+        // 投稿の総数を再取得
         axios
           .get("http://localhost:8000/api/blog/count")
           .then((response) => {

@@ -60,9 +60,9 @@ export default function Search() {
         description: editDescription,
       })
       .then((response) => {
-        // 編集が成功したら、全ての投稿を再取得します
+        // 編集が成功したら、全ての投稿を再取得
         axios
-          .get("http://localhost:8000/api/blog")
+          .get("http://localhost:8000/api/blog/get?startIndex=0")
           .then((response) => {
             setSearchResults(response.data);
           })
@@ -80,7 +80,7 @@ export default function Search() {
     axios
       .delete(`http://localhost:8000/api/blog/delete/${id}`)
       .then((response) => {
-        // 削除が成功したら、全ての投稿を再取得します
+        // 削除が成功したら、全ての投稿を再取得
         axios
           .get("http://localhost:8000/api/blog")
           .then((response) => {
