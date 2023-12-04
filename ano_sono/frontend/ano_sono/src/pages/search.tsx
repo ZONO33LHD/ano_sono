@@ -3,13 +3,6 @@ import { NavBar } from "../app/components/NavBar";
 import Footer from "../app/components/Footer";
 import axios from "axios";
 
-interface PostProps {
-  id: number;
-  title: string;
-  description: string;
-  url: string;
-}
-
 type SearchResult = {
   id: number;
   title: string;
@@ -21,21 +14,43 @@ export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [descriptionTerm, setDescriptionTerm] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+  const limit = 7;
+  const [showModal, setShowModal] = useState(false);
+  const [editId, setEditId] = useState<number>(0);
+  const [editUrl, setEditUrl] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await axios.post(`http://localhost:8000/api/blog/search`, {
       title: searchTerm,
       description: descriptionTerm,
+      startIndex: startIndex,
+      limit: limit,
     });
     setSearchResults(response.data);
+
+    // 検索が成功したら、"もっと見る"ボタンを表示
+    setShowLoadMoreButton(true);
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [editId, setEditId] = useState<number>(0);
-  const [editUrl, setEditUrl] = useState("");
-  const [editTitle, setEditTitle] = useState("");
-  const [editDescription, setEditDescription] = useState("");
+  const loadMoreResults = async () => {
+    const response = await axios.post(`http://localhost:8000/api/blog/search`, {
+      title: searchTerm,
+      description: descriptionTerm,
+      startIndex: searchResults.length,
+      limit: limit,
+    });
+    setSearchResults(searchResults.concat(response.data));
+
+    // 返された結果の数がlimitより少なければ、"もっと見る"ボタンを非表示にする
+    if (response.data.length < limit) {
+      setShowLoadMoreButton(false);
+    }
+  };
 
   const handleOpenEditModal = (
     id: number,
@@ -80,15 +95,10 @@ export default function Search() {
     axios
       .delete(`http://localhost:8000/api/blog/delete/${id}`)
       .then((response) => {
-        // 削除が成功したら、全ての投稿を再取得
-        axios
-          .get("http://localhost:8000/api/blog")
-          .then((response) => {
-            setSearchResults(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        // 削除が成功したら、ローカルの状態から削除した投稿を除外
+        setSearchResults((prevResults) =>
+          prevResults.filter((result) => result.id !== id)
+        );
       })
       .catch((error) => {
         console.error(error);
@@ -97,7 +107,9 @@ export default function Search() {
 
   return (
     <>
-      <NavBar />
+      <div className="sticky top-0 z-50">
+        <NavBar />
+      </div>
       <div className="ml-10 mt-6 w-4/5 mx-auto">
         <h1 className="text-2x1 font-bold mb-4">検索画面</h1>
         <form onSubmit={handleSearch} className="mb-4">
@@ -160,6 +172,18 @@ export default function Search() {
             </div>
           </div>
         ))}
+        <div className="ml-10 mt-6 w-4/5 mx-auto pb-20">
+          <div className="flex justify-center items-end mt-auto">
+            {showLoadMoreButton && (
+              <button
+                onClick={loadMoreResults}
+                className="px-5 py-2 rounded bg-blue-500 text-white cursor-pointer"
+              >
+                もっと見る
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       {showModal && (
         <div
