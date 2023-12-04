@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.entity.UrlStorage;
 import com.project.form.ContentsForm;
+import com.project.form.SearchForm;
 
 import java.util.List;
 
@@ -21,5 +22,8 @@ public interface HomeService {
 
     // 登録されている情報の削除処理
     void deleteBlogContents(Long id);
+
+    // 検索結果を取得するメソッド
+    public List<UrlStorage> getSearchResult(SearchForm searchForm);
     
 }

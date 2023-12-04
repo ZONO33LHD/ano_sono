@@ -1,6 +1,7 @@
 package com.project.service.impl;
 
 import com.project.entity.UrlStorage;
+import com.project.form.SearchForm;
 import com.project.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,14 @@ public class HomeServiceImpl implements HomeService {
 	public void deleteBlogContents(Long id) {
 
 		homeMapper.deleteBlogContents(id);
+	}
+
+	// 検索結果を取得するメソッド
+	// HomeServiceImpl.java
+	@Override
+	public List<UrlStorage> getSearchResult(SearchForm searchForm) {
+		// デバッグログを追加
+		System.out.println("Debug: getSearchResult is called with " + searchForm);
+		return homeMapper.getSearchResult(searchForm, 100, 0);
 	}
 }

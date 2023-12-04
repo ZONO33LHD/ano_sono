@@ -39,4 +39,18 @@
         WHERE id = #{id}
     </delete>
 
+    <!-- 検索処理 -->
+    <select id="getSearchResult" resultType="com.project.entity.UrlStorage">
+        SELECT * FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY id) r, t.*
+        FROM (
+        SELECT * FROM SPRINGPROJECT.URL_STORAGE
+        WHERE (#{searchForm.title} IS NULL OR title LIKE '%' || #{searchForm.title} || '%')
+        AND (#{searchForm.description} IS NULL OR description LIKE '%' || #{searchForm.description} || '%')
+        ORDER BY id
+        ) t
+        )
+        WHERE r BETWEEN #{offset} + 1 AND #{offset} + #{limit}
+    </select>
+
 </mapper>
