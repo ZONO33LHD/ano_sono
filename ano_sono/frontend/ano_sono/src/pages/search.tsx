@@ -23,18 +23,52 @@ export default function Search() {
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
 
+  // 完全一致と部分一致の状態を管理するためのuseStateフックを追加
+  const [isExactMatch, setIsExactMatch] = useState(false);
+  const [isPartialMatch, setIsPartialMatch] = useState(false);
+
+  // チェックボックスが変更されたときに状態を更新するイベントハンドラ
+  const handleExactMatchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsExactMatch(event.target.checked);
+    if (event.target.checked) {
+      setIsPartialMatch(false);
+    }
+  };
+
+  const handlePartialMatchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsPartialMatch(event.target.checked);
+    if (event.target.checked) {
+      setIsExactMatch(false);
+    }
+  };
+
+  // 検索関数内で、どちらのチェックボックスが選択されているかに基づいて検索ロジックを分岐
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    let searchType = "";
+    if (isExactMatch) {
+      searchType = "exact";
+    } else if (isPartialMatch) {
+      searchType = "partial";
+    }
+
+    console.log(searchType); // ここでsearchTypeの値をログに出力
+
     const response = await axios.post(`http://localhost:8000/api/blog/search`, {
       title: searchTerm,
       description: descriptionTerm,
       startIndex: startIndex,
       limit: limit,
+      searchType: searchType, // ここでsearchTypeをPOSTリクエストのボディに含める
     });
-    setSearchResults(response.data);
 
-    // 検索が成功したら、"もっと見る"ボタンを表示
-    setShowLoadMoreButton(true);
+    setSearchResults(response.data);
+    setShowLoadMoreButton(response.data.length >= limit);
   };
 
   const loadMoreResults = async () => {
@@ -110,9 +144,9 @@ export default function Search() {
       <div className="sticky top-0 z-50">
         <NavBar />
       </div>
-      <div className="ml-10 mt-6 w-4/5 mx-auto">
+      <div className="flex flex-col items-start mt-6 w-4/5 mx-auto">
         <h1 className="text-2x1 font-bold mb-4">検索画面</h1>
-        <form onSubmit={handleSearch} className="mb-4">
+        <form onSubmit={handleSearch} className="mb-4 w-full">
           <input
             type="text"
             value={searchTerm}
@@ -127,6 +161,24 @@ export default function Search() {
             className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
             placeholder="一言"
           />
+          <div className="flex space-x-4">
+            <div>
+              <input
+                type="checkbox"
+                checked={isExactMatch}
+                onChange={handleExactMatchChange}
+              />
+              <label>完全一致</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={isPartialMatch}
+                onChange={handlePartialMatchChange}
+              />
+              <label>部分一致</label>
+            </div>
+          </div>
           <div className="text-center">
             <button
               type="submit"
@@ -136,52 +188,54 @@ export default function Search() {
             </button>
           </div>
         </form>
-        {searchResults.map((result) => (
-          <div
-            key={result.id}
-            className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative hover:shadow-xl transition-shadow duration-200"
-          >
-            <div>
-              <a href={result.url} target="_blank" className="card-body p-4">
-                <h5 className="card-title pl-3 text-xl font-bold underline">
-                  {result.title}
-                </h5>
-                <p className="card-text pl-3 text-gray-700 mt-2">
-                  {result.description}
-                </p>
-              </a>
-              <button
-                onClick={() =>
-                  handleOpenEditModal(
-                    result.id,
-                    result.title,
-                    result.url,
-                    result.description
-                  )
-                }
-                className="absolute right-20 top-1/2 transform -translate-y-1/2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                編集
-              </button>
-              <button
-                onClick={() => handleDelete(result.id)}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-16"
-              >
-                削除
-              </button>
+        <div className="flex flex-col items-start mt-6 w-4/5 mx-auto">
+          {searchResults.map((result) => (
+            <div
+              key={result.id}
+              className="card m-0 mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative hover:shadow-xl transition-shadow duration-200 w-full"
+            >
+              <div>
+                <a href={result.url} target="_blank" className="card-body p-4">
+                  <h5 className="card-title pl-3 text-xl font-bold underline">
+                    {result.title}
+                  </h5>
+                  <p className="card-text pl-3 text-gray-700 mt-2">
+                    {result.description}
+                  </p>
+                </a>
+                <button
+                  onClick={() =>
+                    handleOpenEditModal(
+                      result.id,
+                      result.title,
+                      result.url,
+                      result.description
+                    )
+                  }
+                  className="absolute right-20 top-1/2 transform -translate-y-1/2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  編集
+                </button>
+                <button
+                  onClick={() => handleDelete(result.id)}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-16"
+                >
+                  削除
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-        <div className="ml-10 mt-6 w-4/5 mx-auto pb-20">
-          <div className="flex justify-center items-end mt-auto">
-            {showLoadMoreButton && (
-              <button
-                onClick={loadMoreResults}
-                className="px-5 py-2 rounded bg-blue-500 text-white cursor-pointer"
-              >
-                もっと見る
-              </button>
-            )}
+          ))}
+          <div className="mt-6 w-4/5 mx-auto pb-20">
+            <div className="flex justify-center items-end mt-auto">
+              {showLoadMoreButton && (
+                <button
+                  onClick={loadMoreResults}
+                  className="px-5 py-2 rounded bg-gray-500 text-white cursor-pointer"
+                >
+                  もっと見る
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

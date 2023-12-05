@@ -44,13 +44,26 @@
     </delete>
 
     <!-- 検索処理 -->
+    <!-- 検索処理 -->
     <select id="getSearchResult" resultType="com.project.entity.UrlStorage">
         SELECT * FROM (
         SELECT ROW_NUMBER() OVER (ORDER BY id) r, t.*
         FROM (
         SELECT * FROM SPRINGPROJECT.URL_STORAGE
-        WHERE (#{searchForm.title} IS NULL OR title LIKE '%' || #{searchForm.title} || '%')
-        AND (#{searchForm.description} IS NULL OR description LIKE '%' || #{searchForm.description} || '%')
+        WHERE
+        <choose>
+            <when test="searchForm.searchType == 'exact'">
+                (#{searchForm.title} IS NOT NULL AND title = #{searchForm.title})
+                AND (#{searchForm.description} IS NULL OR description LIKE '%' || #{searchForm.description} || '%')
+            </when>
+            <when test="searchForm.searchType == 'partial'">
+                (#{searchForm.title} IS NULL OR title LIKE '%' || #{searchForm.title} || '%')
+                AND (#{searchForm.description} IS NULL OR description LIKE '%' || #{searchForm.description} || '%')
+            </when>
+            <otherwise>
+                (#{searchForm.description} IS NULL OR description LIKE '%' || #{searchForm.description} || '%')
+            </otherwise>
+        </choose>
         ORDER BY id
         ) t
         )
