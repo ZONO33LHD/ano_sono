@@ -232,15 +232,17 @@ const Page: React.FC = () => {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative hover:shadow-xl transition-shadow duration-200"
+              className="card m-10 bg-white shadow-lg rounded-lg overflow-hidden my-4 block relative hover:shadow-xl transition-shadow duration-200 h-128 overflow-auto"
             >
               <div>
                 <a href={post.url} target="_blank" className="card-body p-4">
-                  <h5 className="card-title pl-3 text-xl font-bold underline">
-                    {post.title}
+                  <h5 className="card-title pl-3 text-xl font-bold underline truncate">
+                    {post.title.length > 30
+                      ? `${post.title.substring(0, 60)}...`
+                      : post.title}
                   </h5>
-                  <p className="card-text pl-3 text-gray-700 mt-2">
-                    {post.description}
+                  <p className="card-text pl-3 text-gray-700 mt-2 min-h-[size]">
+                    {post.description || "　"}
                   </p>
                 </a>
                 <button
