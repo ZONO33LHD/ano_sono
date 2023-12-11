@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+	implementation 'org.springframework.session:spring-session-core'
+	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 }
 
 
