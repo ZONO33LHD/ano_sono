@@ -30,7 +30,6 @@ public class HomeController {
 	
 
 	// URL登録処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/api/blog")
 	public String handlePostRequest(@RequestBody ContentsForm form) {
 		logger.info(name);
@@ -40,7 +39,6 @@ public class HomeController {
 	}
 
 	// URL取得処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/api/blog/get")
 	public List<UrlStorage> handleGetRequest(@RequestParam int startIndex) {
 		logger.info(name);
@@ -50,7 +48,6 @@ public class HomeController {
 		return urlList;
 	}
 	// 登録されているURLの総数を取得する処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/api/blog/count")
 	public int handleGetCountRequest() {
 		logger.info(name);
@@ -59,7 +56,6 @@ public class HomeController {
 	}
 
 	// 登録されている情報の編集更新処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/api/blog/edit/{id}")
 	public void handlePutRequest(@PathVariable("id") Long id, @RequestBody ContentsForm form) {
 		logger.info(name);
@@ -67,7 +63,6 @@ public class HomeController {
 	}
 
 	// 登録されている情報の削除処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/api/blog/delete/{id}")
 	public void handleDeleteRequest(@PathVariable("id") Long id) {
 		logger.info(name);
@@ -75,7 +70,6 @@ public class HomeController {
 	}
 
 	// 検索処理
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/api/blog/search")
 	public List<UrlStorage> handleSearchRequest(@RequestBody SearchForm searchForm) {
 		return homeService.getSearchResult(searchForm);
