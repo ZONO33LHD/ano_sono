@@ -9,6 +9,9 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
   ],
+  session: {
+    maxAge: 3600,
+  },
 
 
   callbacks: {

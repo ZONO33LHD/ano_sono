@@ -22,8 +22,8 @@ export function NavBar() {
         <Link href="/search" className="mr-5 hover:text-gray-300">
           Search
         </Link>
-        <Link href="/preference" className="hover:text-gray-300">
-          Preference
+        <Link href="/about" className="hover:text-gray-300">
+          About
         </Link>
       </div>
     </nav>
