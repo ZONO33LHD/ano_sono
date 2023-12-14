@@ -207,10 +207,21 @@ const Page: React.FC = () => {
       });
   }, [currentPage]);
 
+  // コンポーネント内部
+useEffect(() => {
+  // コンポーネントがマウントされたときに背景色を黒に設定(bg-gray-200)
+  document.body.style.backgroundColor = '#E5E7EB';
+
+  // コンポーネントがアンマウントされたときに背景色をリセット
+  return () => {
+    document.body.style.backgroundColor = '';
+  };
+}, []);
+
 
   return (
     <>
-      <main>
+      <main className="bg-gray-200">
         <div>
           <Image
             src={top_image}
@@ -221,7 +232,7 @@ const Page: React.FC = () => {
             height={400}
           />
         </div>
-        <div className="fixed mt-3  w-full flex justify-end bg-white z-10">
+        <div className="fixed mt-3  w-full flex justify-end bg-gray-200 z-10">
           <button
             onClick={handleOpenModal}
             className="relative bg-green-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mr-10"
@@ -262,7 +273,7 @@ const Page: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="fixed bottom-16 w-full flex justify-center bg-white z-10">
+        <div className="fixed bottom-16 w-full flex justify-center bg-gray-200 z-10">
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
@@ -272,7 +283,7 @@ const Page: React.FC = () => {
           >
             &lt;
           </button>
-          <div className="flex items-center">
+          <div className="flex items-center bg">
             <p className="mx-2">{`${currentPage} / ${totalPages}`}</p>
           </div>
           <button

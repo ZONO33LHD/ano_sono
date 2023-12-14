@@ -196,8 +196,10 @@ export default function Search() {
             >
               <div>
                 <a href={result.url} target="_blank" className="card-body p-4">
-                  <h5 className="card-title pl-3 text-xl font-bold underline">
-                    {result.title}
+                <h5 className="card-title pl-3 text-xl font-bold underline truncate">
+                    {result.title.length > 40
+                      ? `${result.title.substring(0, 60)}...`
+                      : result.title}
                   </h5>
                   <p className="card-text pl-3 text-gray-700 mt-2">
                     {result.description}
