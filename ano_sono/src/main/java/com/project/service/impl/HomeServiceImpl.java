@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.project.mapper.HomeMapper;
 import com.project.form.ContentsForm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,53 +19,77 @@ import java.util.List;
  */
 @Service
 public class HomeServiceImpl implements HomeService {
-    
+
 	@Autowired
 	private HomeMapper homeMapper;
 
 	// URLを登録するメソッド
 	@Override
 	public void registBlogUrl(ContentsForm form) {
-
-		homeMapper.registBlogUrl(form);
+		try {
+			homeMapper.registBlogUrl(form);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// URLを取得するメソッド
 	@Override
 	public List<UrlStorage> getBlogUrls(int limit, int offset) {
-
-		List<UrlStorage> result = homeMapper.getBlogUrls(limit, offset);
-
-		return result;
+		try {
+			return homeMapper.getBlogUrls(limit, offset);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// 登録されているURLの総数を取得するメソッド
 	@Override
 	public int getCountUrls() {
-
-		return homeMapper.getCountUrls();
+		try {
+			return homeMapper.getCountUrls();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	// 登録されている情報の編集更新処理
 	@Override
 	public void updateBlogContents(ContentsForm form) {
-
-		homeMapper.updateBlogContents(form);
+		try {
+			homeMapper.updateBlogContents(form);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 登録されている情報の削除処理
 	@Override
 	public void deleteBlogContents(Long id) {
-
-		homeMapper.deleteBlogContents(id);
+		try {
+			homeMapper.deleteBlogContents(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 検索結果を取得するメソッド
 	// HomeServiceImpl.java
 	@Override
 	public List<UrlStorage> getSearchResult(SearchForm searchForm) {
-		// デバッグログを追加
-		System.out.println("Debug: getSearchResult is called with " + searchForm);
-		return homeMapper.getSearchResult(searchForm, 100, 0);
+		try {
+			System.out.println("Debug: getSearchResult is called with " + searchForm);
+			List<UrlStorage> results = homeMapper.getSearchResult(searchForm, 100, 0);
+			if (results == null || results.isEmpty()) {
+				System.out.println("No search results found!!");
+				return new ArrayList<>(); // 空のリストを返す
+			}
+			return results;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>(); // エラーが発生した場合も空のリストを返す
+		}
 	}
 }

@@ -22,6 +22,7 @@ export default function Search() {
   const [editUrl, setEditUrl] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // 完全一致と部分一致の状態を管理するためのuseStateフックを追加
   const [isExactMatch, setIsExactMatch] = useState(false);
@@ -109,16 +110,20 @@ export default function Search() {
         description: editDescription,
       })
       .then((response) => {
-        // 編集が成功したら、全ての投稿を再取得
-        axios
-          .get("http://localhost:8000/api/blog/get?startIndex=0")
-          .then((response) => {
-            setSearchResults(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        setShowModal(false); // モーダルを閉じる
+        if (response.data.startsWith("URLが正しくありません")) {
+          setErrorMessage(response.data);
+        } else {
+          // 編集が成功したら、全ての投稿を再取得
+          axios
+            .get("http://localhost:8000/api/blog/get?startIndex=0")
+            .then((response) => {
+              setSearchResults(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          setShowModal(false); // モーダルを閉じる
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -267,6 +272,7 @@ export default function Search() {
                 >
                   投稿を編集
                 </h2>
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                 <form onSubmit={handleEdit}>
                   <input
                     type="text"
