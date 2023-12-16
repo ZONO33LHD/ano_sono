@@ -17,6 +17,7 @@ const Page: React.FC = () => {
   const [url, setUrl] = React.useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -70,20 +71,19 @@ const Page: React.FC = () => {
     }
     setEditModalOpen(true);
   };
-
-  const handleUpdate = (event: React.FormEvent) => {
+  const handleUpdate = async (event: React.FormEvent) => {
     event.preventDefault();
-    axios
-      .put(`http://localhost:8000/api/blog/edit/${editingPostId}`, {
+    try {
+      const response = await axios.put(`http://localhost:8000/api/blog/edit/${editingPostId}`, {
         id: editingPostId,
         title: editingTitle,
         url: editingUrl,
         description: editingDescription,
-      })
-      .then((response) => {
-        // 更新が成功したら、編集モーダルを閉じる
+      });
+      if (response.data.startsWith("URLが正しくありません")) {
+        setErrorMessage(response.data);
+      } else {
         setEditModalOpen(false);
-        // 投稿リストを更新します
         setPosts(
           posts.map((post) =>
             post.id === editingPostId
@@ -96,11 +96,10 @@ const Page: React.FC = () => {
               : post
           )
         );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    setEditModalOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCloseEditModal = () => {
@@ -132,16 +131,17 @@ const Page: React.FC = () => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    axios
-      .post("http://localhost:8000/api/blog", {
+    try {
+      const response = await axios.post("http://localhost:8000/api/blog", {
         title: title,
         url: url,
         description: description,
-      })
-      .then((response) => {
+      });
+      if (response.data.startsWith("URLが正しくありません")) {
+        setErrorMessage(response.data);
+      } else {
         setShowModal(false);
         setTitle("");
         setDescription("");
@@ -156,19 +156,13 @@ const Page: React.FC = () => {
           },
         ]);
         // 投稿の総数を再取得
-        axios
-          .get("http://localhost:8000/api/blog/count")
-          .then((response) => {
-            setTotalPages(Math.ceil(response.data / 5));
-            setCurrentPage(Math.ceil(response.data / 5)); // 追加: currentPageを最新のページに更新
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        const countResponse = await axios.get("http://localhost:8000/api/blog/count");
+        setTotalPages(Math.ceil(countResponse.data / 5));
+        setCurrentPage(Math.ceil(countResponse.data / 5)); // 追加: currentPageを最新のページに更新
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -323,6 +317,7 @@ useEffect(() => {
                   >
                     気になる保管したいサイトを登録しよう！
                   </h2>
+                  {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                   <form onSubmit={handleSubmit}>
                     <input
                       type="text"
@@ -395,6 +390,7 @@ useEffect(() => {
                   >
                     投稿を編集
                   </h2>
+                  {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                   <form onSubmit={handleUpdate}>
                     <input
                       type="text"
