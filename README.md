@@ -8,7 +8,7 @@
 過去にブログサイトで掲載されている記事について不明点などの洗い出しを実施し、、どのWEBサイトか不明になった。
 
 # 技術スタック
-- Java JDK21 SpringBoot Ver3.2
+- Java JDK17 SpringBoot Ver3.2
 - TypeScript NextJs Ver13.5
 - Oracle（リリース時にはMySQLかPostgreSQL予定）Ver21c
 # 開発環境
