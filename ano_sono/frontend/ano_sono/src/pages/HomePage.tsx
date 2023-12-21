@@ -73,6 +73,7 @@ const Page: React.FC = () => {
   };
   const handleUpdate = async (event: React.FormEvent) => {
     event.preventDefault();
+    setErrorMessage("");
     try {
       const response = await axios.put(`http://localhost:8000/api/blog/edit/${editingPostId}`, {
         id: editingPostId,
@@ -106,6 +107,7 @@ const Page: React.FC = () => {
     // 編集モーダルを閉じ、編集中の投稿IDをリセットする
     setEditModalOpen(false);
     setEditingPostId(null);
+    setErrorMessage(''); 
   };
 
   useEffect(() => {
@@ -133,6 +135,7 @@ const Page: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorMessage("");
     try {
       const response = await axios.post("http://localhost:8000/api/blog", {
         title: title,

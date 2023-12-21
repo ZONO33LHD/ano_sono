@@ -122,6 +122,7 @@ export default function Search() {
             .catch((error) => {
               console.error(error);
             });
+
           setShowModal(false); // モーダルを閉じる
         }
       })
@@ -201,7 +202,7 @@ export default function Search() {
             >
               <div>
                 <a href={result.url} target="_blank" className="card-body p-4">
-                <h5 className="card-title pl-3 text-xl font-bold underline truncate">
+                  <h5 className="card-title pl-3 text-xl font-bold underline truncate">
                     {result.title.length > 40
                       ? `${result.title.substring(0, 60)}...`
                       : result.title}
@@ -303,7 +304,10 @@ export default function Search() {
                       更新
                     </button>
                     <button
-                      onClick={() => setShowModal(false)}
+                      onClick={() => {
+                        setShowModal(false);
+                        setErrorMessage("");
+                      }}
                       className="ml-3 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     >
                       キャンセル
